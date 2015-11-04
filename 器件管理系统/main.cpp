@@ -506,7 +506,6 @@ void Devices_search()
 		return;
 	}
 	}
-	throw NotFinishException();
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_change
@@ -519,7 +518,101 @@ void Devices_search()
 *///////////////////////////////////////////////////////////////////////////////////
 void Devices_change()
 {
-	throw NotFinishException();
+lable_Devices_change1:
+	system("cls");
+	cout << "请输入要操作的器件名：";
+	string name;
+	cin >> name;
+	Things* p = head.next;
+	while (p)
+	{
+		if (p->thing->name == name)break;
+		p = p->next;
+	}
+	if (p)
+	{
+		cout << "名称：" << p->thing->name << endl;
+		if (p->type == 1 || p->type == 2)
+			cout << "数量：" << p->thing->num << endl;
+		if (p->type == 1 || p->type == 3)
+			cout << "价值：" << p->thing->value << endl;
+
+		cout << endl << endl;
+	lable_Devices_change2:
+		cout << "请选择要修改的信息名称（N），数量（Q），价值（V）：";
+		char t;
+		cin >> t;
+		switch (t)
+		{
+		case('n') :
+		case('N') :
+		{
+		lable_Devices_change3:
+			cout << "请输入修改后的名称：";
+			string name;
+			cin >> name;
+			if (CheckName(name))
+				p->thing->name = name;
+			else goto lable_Devices_change3;
+			break;
+		}
+		case('q') :
+		case('Q') :
+		{
+			if (p->type == 3 || p->type == 4)
+			{
+				cout << "该器件不支持该操作" << endl;
+				system("pause");
+				return;
+			}
+		lable_Devices_change4:
+			cout << "请输入修改后的数量：";
+			int num;
+			cin >> num;
+			if (num < 0)
+				goto lable_Devices_change4;
+			p->thing->num = num;
+			break;
+		}
+		case('v') :
+		case('V') :
+		{
+			if (p->type == 2 || p->type == 4)
+			{
+				cout << "该器件不支持该操作" << endl;
+				system("pause");
+				return;
+			}
+		lable_Devices_change5:
+			cout << "请输入修改后的价值：";
+			double value;
+			cin >> value;
+			if (value <= 0)
+				goto lable_Devices_change5;
+			p->thing->value = value;
+			break;
+		}
+		default:goto lable_Devices_change2;
+		}
+		system("cls");
+		cout << "修改后：" << endl << endl;
+		cout << "名称：" << p->thing->name << endl;
+		if (p->type == 1 || p->type == 2)
+			cout << "数量：" << p->thing->num << endl;
+		if (p->type == 1 || p->type == 3)
+			cout << "价值：" << p->thing->value << endl;
+
+		cout << endl << endl;
+
+		system("pause");
+		return;
+	}
+	else
+	{
+		cout << "没有找到这个器件" << endl;
+		system("pause");
+		goto lable_Devices_change1;
+	}
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_io
