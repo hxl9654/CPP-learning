@@ -4,10 +4,22 @@
 #include<stdexcept>
 #include<exception>
 using namespace std;
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：NotFinishException
+ *功  能：功能未完成异常。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
 class NotFinishException: public exception
 {
-
+public:
+    const char *what() const throw();
 };
+const char * NotFinishException::what() const throw()
+{
+    return "该功能未完成";
+}
 class thing
 {
 public:
