@@ -163,7 +163,7 @@ double Thing::getValueSum()
 *///////////////////////////////////////////////////////////////////////////////////
 struct Things {
 	ThingBase* thing;
-	int type;
+	int type;				//1.普通器件；2.不计算价值的器件；3.独一无二的器件；4.独一无二且无价值的器件
 	Things* next = NULL;
 }head;
 /*//////////////////////////////////////////////////////////////////////////////////
@@ -689,7 +689,131 @@ lable_Devices_io1:
 *///////////////////////////////////////////////////////////////////////////////////
 void File_read()
 {
-	throw NotFinishException();
+	system("cls");
+	ifstream fin("data.txt");
+	int t;
+	while (1)
+	{
+		try
+		{
+			fin >> t;
+			switch (t)
+			{
+			case(0) : break;
+			case(1) :
+			{
+				string name;
+				int num;
+				double value;
+				fin >> name;
+				if (!CheckName(name))throw invalid_argument("输入文件错误");
+				fin >> num;
+				if (num <= 0)throw invalid_argument("输入文件错误");
+				fin >> value;
+				if (value <= 0)throw invalid_argument("输入文件错误");
+
+				Things* p = &head;
+				Things* add = (Things*)malloc(sizeof(Things));
+				while (p->next)
+					p = p->next;
+				p->next = add;
+
+				Thing* a = new Thing();
+				a->name = name;
+				a->num = num;
+				a->value = value;
+
+				add->type = 1;
+				add->thing = a;
+				add->next = NULL;
+				break;
+			}
+			case(2) :
+			{
+				string name;
+				int num;
+				fin >> name;
+				if (!CheckName(name))throw invalid_argument("输入文件错误");
+				fin >> num;
+				if (num <= 0)throw invalid_argument("输入文件错误");
+
+				Things* p = &head;
+				Things* add = (Things*)malloc(sizeof(Things));
+				while (p->next)
+					p = p->next;
+				p->next = add;
+
+				Thing_withoutValue* a = new Thing_withoutValue();
+				a->name = name;
+				a->num = num;
+
+				add->type = 2;
+				add->thing = a;
+				add->next = NULL;
+				break;
+			}
+			case(3) :
+			{
+				string name;
+				double value;
+				fin >> name;
+				if (!CheckName(name))throw invalid_argument("输入文件错误");
+				fin >> value;
+				if (value <= 0)throw invalid_argument("输入文件错误");
+
+				Things* p = &head;
+				Things* add = (Things*)malloc(sizeof(Things));
+				while (p->next)
+					p = p->next;
+				p->next = add;
+
+				Thing_withoutNum* a = new Thing_withoutNum();
+				a->name = name;
+				a->value = value;
+
+				add->type = 3;
+				add->thing = a;
+				add->next = NULL;
+				break;
+			}
+			case(4) :
+			{
+				string name;
+				fin >> name;
+				if (!CheckName(name))throw invalid_argument("输入文件错误");
+
+				Things* p = &head;
+				Things* add = (Things*)malloc(sizeof(Things));
+				while (p->next)
+					p = p->next;
+				p->next = add;
+
+				ThingBase* a = new ThingBase();
+				a->name = name;
+
+				add->type = 4;
+				add->thing = a;
+				add->next = NULL;
+				break;
+			}
+			default:
+			{
+				throw invalid_argument("输入文件错误");
+			}
+			}
+		}
+		catch (invalid_argument)
+		{
+			cout << "输入文件格式错误或已损坏，数据读取失败！" << endl;
+			system("pause");
+			return;
+		}
+		if (t == 0)break;
+	}	
+	cout << "数据读入成功！" << endl;
+	fin.close();
+	system("pause");
+	return;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：File_write
@@ -702,7 +826,25 @@ void File_read()
 *///////////////////////////////////////////////////////////////////////////////////
 void File_write()
 {
-	throw NotFinishException();
+	system("cls");
+	Things* p = head.next;
+	ofstream fout("data.txt");
+	while (p)
+	{
+		switch (p->type)
+		{
+		case(1) : fout << 1 << endl << p->thing->name << endl << p->thing->num << endl << p->thing->value << endl; break;
+		case(2) : fout << 2 << endl << p->thing->name << endl << p->thing->num << endl; break;
+		case(3) : fout << 3 << endl << p->thing->name << endl << p->thing->value << endl; break;
+		case(4) : fout << 4 << endl << p->thing->name << endl; break;
+		default:break;
+		}
+		p = p->next;
+	}
+	fout << 0;
+	cout << "存盘成功！" << endl;
+	system("pause");
+	fout.close();
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：main
