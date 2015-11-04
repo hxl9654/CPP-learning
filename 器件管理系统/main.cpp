@@ -51,7 +51,7 @@ const char * NoValueException::what() const throw()
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class base
+class Base
 {
 public:
     string name;    //该器件的名字
@@ -59,15 +59,15 @@ public:
     virtual void decrease(int n) const;   //器件出库（n：数量）
     virtual double getValueSum() const;   //获取该器件的总价值（返回：总价值）
 };
-void base::increase(int n) const
+void Base::increase(int n) const
 {
     throw NoValueException("num");
 }
-void base::decrease(int n) const
+void Base::decrease(int n) const
 {
     throw NoValueException("num");
 }
-double base::getValueSum() const
+double Base::getValueSum() const
 {
     throw NoValueException("value");
 }
@@ -78,13 +78,13 @@ double base::getValueSum() const
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class thing_withoutNum: public base
+class Thing_withoutNum: public Base
 {
 public:
     double value;       //器件单价
     double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
-double thing_withoutNum::getValueSum()
+double Thing_withoutNum::getValueSum()
 {
     return value;
 }
@@ -95,18 +95,18 @@ double thing_withoutNum::getValueSum()
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class thing_withoutValue: public base
+class Thing_withoutValue: public Base
 {
 public:
     int num;            //库存数量
     void increase(int n);   //器件入库（n：数量）
     void decrease(int n);   //器件出库（n：数量）
 };
-void thing_withoutValue::increase(int n)
+void Thing_withoutValue::increase(int n)
 {
     num += n;
 }
-void thing_withoutValue::decrease(int n)
+void Thing_withoutValue::decrease(int n)
 {
     num -= n;
 }
@@ -120,7 +120,7 @@ void thing_withoutValue::decrease(int n)
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class thing: public base
+class Thing: public Base
 {
 public:
     int num;            //库存数量
@@ -129,15 +129,15 @@ public:
     void decrease(int n);   //器件出库（n：数量）
     double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
-void thing::increase(int n)
+void Thing::increase(int n)
 {
     num += n;
 }
-void thing::decrease(int n)
+void Thing::decrease(int n)
 {
     num -= n;
 }
-double thing::getValueSum()
+double Thing::getValueSum()
 {
     return value * num;
 }
