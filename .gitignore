@@ -38,3 +38,6 @@
 \ipch
 器件管理系统/器件管理系统.opensdf
 器件管理系统/器件管理系统.vcxproj.filters
+器件管理系统/器件管理系统.sdf
+器件管理系统/器件管理系统.sdf
+*.sdf
