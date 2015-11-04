@@ -20,15 +20,67 @@ const char * NotFinishException::what() const throw()
 {
     return "该功能未完成";
 }
-class thing
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：NoValueException
+ *功  能：无相应属性异常。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+class NoValueException: public exception
 {
 public:
-    string name = "";
-    int num = 0;
-    double value = 0;
-    void increase(int n);
-    void decrease(int n);
-    double getValueSum();
+    const char *what() const throw();
+};
+const char * NoValueException::what() const throw()
+{
+    return "该对象相应属性";
+}
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：base
+ *功  能：器件的信息基类。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+class base
+{
+public:
+    string name = "";    //该器件的名字
+    virtual void increase(int n) const;   //器件入库（n：数量）
+    virtual void decrease(int n) const;   //器件出库（n：数量）
+    virtual double getValueSum() const;   //获取该器件的总价值（返回：总价值）
+};
+void base::increase(int n) const
+{
+    throw NoValueException();
+}
+void base::decrease(int n) const
+{
+    throw NoValueException();
+}
+double base::getValueSum() const
+{
+    throw NoValueException();
+}
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：thing
+ *功  能：存储器件的信息。
+ *作  者：何相龙
+ *版  本：1.1
+ *日  期：2015-11-04
+ *描  述：建立基类，改为从基类继承。
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+class thing: public base
+{
+public:
+    int num = 0;            //库存数量
+    double value = 0;       //器件单价
+    void increase(int n);   //器件入库（n：数量）
+    void decrease(int n);   //器件出库（n：数量）
+    double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
 void thing::increase(int n)
 {
