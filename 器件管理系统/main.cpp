@@ -1,3 +1,24 @@
+// *   <ThingsManage>  Copyright (C) <2015>  <Xianglong He>
+// *   This program is free software: you can redistribute it and/or modify
+// *   it under the terms of the GNU General Public License as published by
+// *   the Free Software Foundation, either version 3 of the License, or
+// *   (at your option) any later version.
+// *
+// *   This program is distributed in the hope that it will be useful,
+// *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+// *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// *   GNU General Public License for more details.
+// *
+// *   You should have received a copy of the GNU General Public License
+// *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// *
+// * @author     Xianglong He
+// * @copyright  Copyright (c) 2015 Xianglong He. (http://tec.hxlxz.com)
+// * @license    http://www.gnu.org/licenses/     GPL v3
+// * @version    1.0
+// * @discribe   器件管理系统
+// * 本软件作者是何相龙，使用GPL v3许可证进行授权。
+
 #include "stdafx.h"
 #include<iostream>
 #include<fstream>
@@ -5,8 +26,11 @@
 #include<stdexcept>
 #include<exception>
 #include<string>
-
 using namespace std;
+
+//数据存储文件名
+#define DATA_FILE_NAME "data.txt"
+
 /*//////////////////////////////////////////////////////////////////////////////////
  *类  名：NotFinishException
  *功  能：功能未完成异常。
@@ -242,7 +266,7 @@ bool CheckName(string name)
  *参  数：空
  *返回值：无
  *作  者：何相龙
- *版  本：1.0
+ *版  本：1.1
  *日  期：2015-11-04
  *说  明：修改链表节点创建方法为动态内存分配。
  *版  本：1.0
@@ -416,11 +440,13 @@ void Devices_delete()
 		{
 			q->next = p->next;
 			free(p);
+			cout << "删除成功" << endl;
+			system("pause");
 		}
 	}
 	else
 	{
-		cout << "未找到该器件";
+		cout << "未找到该器件" << endl;
 		system("pause");
 	}
 }
@@ -690,7 +716,7 @@ lable_Devices_io1:
 void File_read()
 {
 	system("cls");
-	ifstream fin("data.txt");
+	ifstream fin(DATA_FILE_NAME);
 	int t;
 	while (1)
 	{
@@ -809,7 +835,7 @@ void File_read()
 			return;
 		}
 		if (t == 0)break;
-	}	
+	}
 	cout << "数据读入成功！" << endl;
 	fin.close();
 	system("pause");
@@ -828,7 +854,7 @@ void File_write()
 {
 	system("cls");
 	Things* p = head.next;
-	ofstream fout("data.txt");
+	ofstream fout(DATA_FILE_NAME);
 	while (p)
 	{
 		switch (p->type)
