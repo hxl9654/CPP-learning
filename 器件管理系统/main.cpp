@@ -14,7 +14,12 @@ using namespace std;
 class NotFinishException: public exception
 {
 public:
+    NotFinishException() throw() { }
+    virtual ~NotFinishException() throw(){ }
+    NotFinishException(string msg) throw(){message = msg;}
     const char *what() const throw();
+private:
+    string message;
 };
 const char * NotFinishException::what() const throw()
 {
@@ -42,7 +47,7 @@ private:
 };
 const char * NoValueException::what() const throw()
 {
-    return "该对象相应属性";
+    return "该对象没有相应属性";
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *类  名：Base
