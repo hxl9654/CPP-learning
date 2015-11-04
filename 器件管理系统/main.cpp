@@ -142,6 +142,17 @@ double Thing::getValueSum()
     return value * num;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
+ *类型名：Things
+ *功  能：存储所有器件信息
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+struct Things{
+        Base* thing;
+        Things* next = NULL;
+    }head;
+/*//////////////////////////////////////////////////////////////////////////////////
  *函数名：menu
  *功  能：显示程序菜单，并返回用户的选择。
  *参  数：空
@@ -189,6 +200,19 @@ bool Exit_confirm()
     else return false;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
+ *函数名：CheckName
+ *功  能：检查器件名是否符合规范、器件名是否已存在
+ *参  数：一个字符串，器件名
+ *返回值：一个逻辑值，true表示名称符合规范。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+bool CheckName(string name)
+{
+    throw NotFinishException();
+}
+/*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_new
  *功  能：录入新器件信息，创建新器件
  *参  数：空
@@ -199,7 +223,124 @@ bool Exit_confirm()
 *///////////////////////////////////////////////////////////////////////////////////
 void Devices_new()
 {
-    throw NotFinishException();
+    system("cls");
+    cout << endl << "请选择器件类型（1.普通器件；2.不计算价值的器件；3.独一无二的器件；4.独一无二且无价值的器件；0.返回）：";
+    int t;
+    cin >> t;
+    switch(t)
+    {
+        case(0):return ;
+        case(1):
+            {
+                string name;
+                int num;
+                double value;
+                lable1:
+                cout << "请输入器件的名称：";
+                cin >> name;
+                if(!CheckName(name))goto lable1;
+                lable2:
+                cout << "请输入器件的数量：";
+                cin >> num;
+                if(num <= 0)goto lable2;
+                lable3:
+                cout << "请输入器件的价值：";
+                cin >> value;
+                if(value <= 0)goto lable3;
+
+                Things* p = &head;
+                Things add;
+                while(p -> next)
+                    p = p -> next;
+                p -> next = &add;
+
+                Thing* a = new Thing();
+                a -> name = name;
+                a -> num = num;
+                a -> value = value;
+
+                add.thing = a;
+                return;
+            }
+        case(2):
+            {
+                string name;
+                int num;
+                lable4:
+                cout << "请输入器件的名称：";
+                cin >> name;
+                if(!CheckName(name))goto lable4;
+                lable5:
+                cout << "请输入器件的数量：";
+                cin >> num;
+                if(num <= 0)goto lable5;
+
+                Things* p = &head;
+                Things add;
+                while(p -> next)
+                    p = p -> next;
+                p -> next = &add;
+
+                Thing_withoutValue* a = new Thing_withoutValue();
+                a -> name = name;
+                a -> num = num;
+
+                add.thing = a;
+                return;
+            }
+        case(3):
+            {
+                string name;
+                double value;
+                lable6:
+                cout << "请输入器件的名称：";
+                cin >> name;
+                if(!CheckName(name))goto lable6;
+                lable7:
+                cout << "请输入器件的价值：";
+                cin >> value;
+                if(value <= 0)goto lable7;
+
+                Things* p = &head;
+                Things add;
+                while(p -> next)
+                    p = p -> next;
+                p -> next = &add;
+
+                Thing_withoutNum* a = new Thing_withoutNum();
+                a -> name = name;
+                a -> value = value;
+
+                add.thing = a;
+                return;
+            }
+        case(4):
+            {
+                string name;
+                lable8:
+                cout << "请输入器件的名称：";
+                cin >> name;
+                if(!CheckName(name))goto lable8;
+
+                Things* p = &head;
+                Things add;
+                while(p -> next)
+                    p = p -> next;
+                p -> next = &add;
+
+                Base* a = new Base();
+                a -> name = name;
+
+                add.thing = a;
+                return;
+            }
+        default:
+            {
+                 cout << "选择有误，请重新选择" << endl;
+                 Devices_new();
+                 return;
+            }
+    }
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_delete
