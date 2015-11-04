@@ -116,7 +116,9 @@ void Thing_withoutValue::increase(int n)
 }
 void Thing_withoutValue::decrease(int n)
 {
-	num -= n;
+	if (num < n)
+		throw underflow_error("库存不足");
+	else num -= n;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *类  名：Thing
@@ -141,7 +143,9 @@ void Thing::increase(int n)
 }
 void Thing::decrease(int n)
 {
-	num -= n;
+	if (num < n)
+		throw underflow_error("库存不足");
+	else num -= n;
 }
 double Thing::getValueSum()
 {
@@ -512,7 +516,7 @@ void Devices_change()
 	throw NotFinishException();
 }
 /*//////////////////////////////////////////////////////////////////////////////////
- *函数名：Devices_new
+ *函数名：Devices_io
  *功  能：器件的进出库操作
  *参  数：空
  *返回值：无
@@ -522,7 +526,58 @@ void Devices_change()
 *///////////////////////////////////////////////////////////////////////////////////
 void Devices_io()
 {
-	throw NotFinishException();
+lable_Devices_io1:
+	system("cls");
+	cout << "请输入要操作的器件名：";
+	string name;
+	cin >> name;
+	Things* p = head.next;
+	while (p)
+	{
+		if (p->thing->name == name)break;
+		p = p->next;
+	}
+	if (p)
+	{
+		cout << "名称：" << p->thing->name << endl;
+		if (p->type == 1 || p->type == 2)
+			cout << "数量：" << p->thing->num << endl;
+		else
+		{
+			cout << "该器件不支持此操作" << endl;
+			system("pause");
+			return;
+		}
+	lable_Devices_io2:
+		cout << "请选择出库（O），入库（I）：";
+		char t;
+		cin >> t;
+		if (t != 'i'&&t != 'I'&&t != 'o'&&t != 'O')
+			goto lable_Devices_io2;
+		cout << "请输入数量：";
+		int n;
+		cin >> n;
+
+		if (t == 'i' || t == 'I')
+			p->thing->increase(n);
+		else
+			try {
+			p->thing->decrease(n);
+		}
+		catch (underflow_error)
+		{
+			cout << "数量不足。" << endl;
+		}
+		cout << "数量：" << p->thing->num << endl << endl;
+		system("pause");
+		return;
+	}
+	else
+	{
+		cout << "没有找到这个器件" << endl;
+		system("pause");
+		goto lable_Devices_io1;
+	}
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：File_read
