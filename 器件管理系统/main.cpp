@@ -59,25 +59,25 @@ const char * NoValueException::what() const throw()
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class Base
+class ThingBase
 {
 public:
 	string name;    //该器件的名字
 	int num;        //库存数量
 	double value;   //器件单价
-	virtual void increase(int n) const;   //器件入库（n：数量）
-	virtual void decrease(int n) const;   //器件出库（n：数量）
-	virtual double getValueSum() const;   //获取该器件的总价值（返回：总价值）
+	virtual void increase(int n);   //器件入库（n：数量）
+	virtual void decrease(int n);   //器件出库（n：数量）
+	virtual double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
-void Base::increase(int n) const
+void ThingBase::increase(int n)
 {
 	throw NoValueException("num");
 }
-void Base::decrease(int n) const
+void ThingBase::decrease(int n)
 {
 	throw NoValueException("num");
 }
-double Base::getValueSum() const
+double ThingBase::getValueSum()
 {
 	throw NoValueException("value");
 }
@@ -88,10 +88,10 @@ double Base::getValueSum() const
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class Thing_withoutNum : public Base
+class Thing_withoutNum : public ThingBase
 {
 public:
-	double getValueSum();   //获取该器件的总价值（返回：总价值）
+	virtual double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
 double Thing_withoutNum::getValueSum()
 {
@@ -104,11 +104,11 @@ double Thing_withoutNum::getValueSum()
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class Thing_withoutValue : public Base
+class Thing_withoutValue : public ThingBase
 {
 public:
-	void increase(int n);   //器件入库（n：数量）
-	void decrease(int n);   //器件出库（n：数量）
+	virtual void increase(int n);    //器件入库（n：数量）
+	virtual void decrease(int n);   //器件出库（n：数量）
 };
 void Thing_withoutValue::increase(int n)
 {
@@ -128,12 +128,12 @@ void Thing_withoutValue::decrease(int n)
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
-class Thing : public Base
+class Thing : public ThingBase
 {
 public:
-	void increase(int n);   //器件入库（n：数量）
-	void decrease(int n);   //器件出库（n：数量）
-	double getValueSum();   //获取该器件的总价值（返回：总价值）
+	virtual void increase(int n);   //器件入库（n：数量）
+	virtual void decrease(int n);   //器件出库（n：数量）
+	virtual double getValueSum();    //获取该器件的总价值（返回：总价值）
 };
 void Thing::increase(int n)
 {
@@ -155,7 +155,7 @@ double Thing::getValueSum()
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
 struct Things {
-	Base* thing;
+	ThingBase* thing;
 	int type;
 	Things* next = NULL;
 }head;
@@ -351,7 +351,7 @@ void Devices_new()
 			p = p->next;
 		p->next = add;
 
-		Base* a = new Base();
+		ThingBase* a = new ThingBase();
 		a->name = name;
 
 		add->type = 4;
@@ -425,6 +425,77 @@ void Devices_delete()
 *///////////////////////////////////////////////////////////////////////////////////
 void Devices_search()
 {
+	system("cls");
+	cout << "请选择要进行的操作。" << endl;
+	cout << "1.输出所有器件清单；2.查询特定器件；0.返回主菜单。：";
+	int t;
+	cin >> t;
+	switch (t)
+	{
+	case(0) : return;
+	case(1) :
+	{
+		system("cls");
+		Things* q = head.next;
+		while (q)
+		{
+			cout << "名称：" << q->thing->name << endl;
+			if (q->type == 1 || q->type == 2)
+				cout << "数量：" << q->thing->num << endl;
+			if (q->type == 1 || q->type == 3)
+			{
+				cout << "价值：" << q->thing->value << endl;
+				cout << "总价值：" << q->thing->getValueSum() << endl;
+			}
+			cout << endl << endl;
+			q = q->next;
+		}
+		system("pause");
+		return;
+	}
+	case(2) :
+	{
+	lable_Devices_search2:
+		system("cls");
+		cout << "请输入要查询的器件名：";
+		string name;
+		cin >> name;
+		Things* p = head.next;
+		while (p)
+		{
+			if (p->thing->name == name)break;
+			p = p->next;
+		}
+		if (p)
+		{
+			cout << "名称：" << p->thing->name << endl;
+			if (p->type == 1 || p->type == 2)
+				cout << "数量：" << p->thing->num << endl;
+			if (p->type == 1 || p->type == 3)
+			{
+				cout << "价值：" << p->thing->value << endl;
+				if (p->type == 1)
+					cout << "总价值：" << p->thing->getValueSum() << endl;
+			}
+			cout << endl << endl;
+			system("pause");
+			return;
+		}
+		else
+		{
+			cout << "没有找到这个器件" << endl;
+			system("pause");
+			goto lable_Devices_search2;
+		}
+	}
+	default:
+	{
+		cout << "输入有误，请重新输入" << endl;
+		system("pause");
+		Devices_search();
+		return;
+	}
+	}
 	throw NotFinishException();
 }
 /*//////////////////////////////////////////////////////////////////////////////////
