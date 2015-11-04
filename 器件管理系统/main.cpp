@@ -45,7 +45,7 @@ const char * NoValueException::what() const throw()
     return "该对象相应属性";
 }
 /*//////////////////////////////////////////////////////////////////////////////////
- *类  名：base
+ *类  名：Base
  *功  能：器件的信息基类。
  *作  者：何相龙
  *版  本：1.0
@@ -72,7 +72,7 @@ double Base::getValueSum() const
     throw NoValueException("value");
 }
 /*//////////////////////////////////////////////////////////////////////////////////
- *类  名：thing_withoutNum
+ *类  名：Thing_withoutNum
  *功  能：存储器件（仅一件）的信息。
  *作  者：何相龙
  *版  本：1.0
@@ -89,7 +89,7 @@ double Thing_withoutNum::getValueSum()
     return value;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
- *类  名：thing_withoutValue
+ *类  名：Thing_withoutValue
  *功  能：存储器件（无价值）的信息。
  *作  者：何相龙
  *版  本：1.0
@@ -111,7 +111,7 @@ void Thing_withoutValue::decrease(int n)
     num -= n;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
- *类  名：thing
+ *类  名：Thing
  *功  能：存储器件的信息。
  *作  者：何相龙
  *版  本：1.1
