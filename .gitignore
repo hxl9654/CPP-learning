@@ -30,3 +30,11 @@
 # Vim
 *.swp
 *.cpp~
+*.tlog
+*.log
+
+\debug
+\.vs
+\ipch
+器件管理系统/器件管理系统.opensdf
+器件管理系统/器件管理系统.vcxproj.filters

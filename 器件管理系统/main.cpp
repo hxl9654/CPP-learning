@@ -1,8 +1,11 @@
+#include "stdafx.h"
 #include<iostream>
 #include<fstream>
 #include<cstdlib>
 #include<stdexcept>
 #include<exception>
+#include<string>
+
 using namespace std;
 /*//////////////////////////////////////////////////////////////////////////////////
  *类  名：NotFinishException
@@ -60,6 +63,8 @@ class Base
 {
 public:
     string name;    //该器件的名字
+    int num;        //库存数量
+    double value;   //器件单价
     virtual void increase(int n) const;   //器件入库（n：数量）
     virtual void decrease(int n) const;   //器件出库（n：数量）
     virtual double getValueSum() const;   //获取该器件的总价值（返回：总价值）
@@ -86,7 +91,6 @@ double Base::getValueSum() const
 class Thing_withoutNum: public Base
 {
 public:
-    double value;       //器件单价
     double getValueSum();   //获取该器件的总价值（返回：总价值）
 };
 double Thing_withoutNum::getValueSum()
@@ -103,7 +107,6 @@ double Thing_withoutNum::getValueSum()
 class Thing_withoutValue: public Base
 {
 public:
-    int num;            //库存数量
     void increase(int n);   //器件入库（n：数量）
     void decrease(int n);   //器件出库（n：数量）
 };
@@ -128,8 +131,6 @@ void Thing_withoutValue::decrease(int n)
 class Thing: public Base
 {
 public:
-    int num;            //库存数量
-    double value;       //器件单价
     void increase(int n);   //器件入库（n：数量）
     void decrease(int n);   //器件出库（n：数量）
     double getValueSum();   //获取该器件的总价值（返回：总价值）
@@ -155,6 +156,7 @@ double Thing::getValueSum()
 *///////////////////////////////////////////////////////////////////////////////////
 struct Things{
         Base* thing;
+        int type;
         Things* next = NULL;
     }head;
 /*//////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +217,17 @@ bool Exit_confirm()
 *///////////////////////////////////////////////////////////////////////////////////
 bool CheckName(string name)
 {
-    throw NotFinishException();
+    if(name == "" || name.length() == 0)
+        return false;
+    Things* p = head.next;
+    while(p)
+    {
+        if(p->thing->name == name)break;
+        p = p -> next;
+    }
+    if(p)
+        return false;
+    else return true;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_new
@@ -240,18 +252,18 @@ void Devices_new()
                 string name;
                 int num;
                 double value;
-                lable1:
+                lable_Devices_new11:
                 cout << "请输入器件的名称：";
                 cin >> name;
-                if(!CheckName(name))goto lable1;
-                lable2:
+                if(!CheckName(name))goto lable_Devices_new11;
+                lable_Devices_new12:
                 cout << "请输入器件的数量：";
                 cin >> num;
-                if(num <= 0)goto lable2;
-                lable3:
+                if(num <= 0)goto lable_Devices_new12;
+                lable_Devices_new13:
                 cout << "请输入器件的价值：";
                 cin >> value;
-                if(value <= 0)goto lable3;
+                if(value <= 0)goto lable_Devices_new13;
 
                 Things* p = &head;
                 Things add;
@@ -264,21 +276,23 @@ void Devices_new()
                 a -> num = num;
                 a -> value = value;
 
+                add.type = 1;
                 add.thing = a;
+                add.next = NULL;
                 return;
             }
         case(2):
             {
                 string name;
                 int num;
-                lable4:
+                lable_Devices_new21:
                 cout << "请输入器件的名称：";
                 cin >> name;
-                if(!CheckName(name))goto lable4;
-                lable5:
+                if(!CheckName(name))goto lable_Devices_new21;
+                lable_Devices_new22:
                 cout << "请输入器件的数量：";
                 cin >> num;
-                if(num <= 0)goto lable5;
+                if(num <= 0)goto lable_Devices_new22;
 
                 Things* p = &head;
                 Things add;
@@ -290,21 +304,23 @@ void Devices_new()
                 a -> name = name;
                 a -> num = num;
 
+                add.type = 2;
                 add.thing = a;
+                add.next = NULL;
                 return;
             }
         case(3):
             {
                 string name;
                 double value;
-                lable6:
+                lable_Devices_new31:
                 cout << "请输入器件的名称：";
                 cin >> name;
-                if(!CheckName(name))goto lable6;
-                lable7:
+                if(!CheckName(name))goto lable_Devices_new31;
+                lable_Devices_new32:
                 cout << "请输入器件的价值：";
                 cin >> value;
-                if(value <= 0)goto lable7;
+                if(value <= 0)goto lable_Devices_new32;
 
                 Things* p = &head;
                 Things add;
@@ -316,16 +332,18 @@ void Devices_new()
                 a -> name = name;
                 a -> value = value;
 
+                add.type = 3;
                 add.thing = a;
+                add.next = NULL;
                 return;
             }
         case(4):
             {
                 string name;
-                lable8:
+                lable_Devices_new41:
                 cout << "请输入器件的名称：";
                 cin >> name;
-                if(!CheckName(name))goto lable8;
+                if(!CheckName(name))goto lable_Devices_new41;
 
                 Things* p = &head;
                 Things add;
@@ -336,7 +354,9 @@ void Devices_new()
                 Base* a = new Base();
                 a -> name = name;
 
+                add.type = 4;
                 add.thing = a;
+                add.next = NULL;
                 return;
             }
         default:
@@ -358,7 +378,41 @@ void Devices_new()
 *///////////////////////////////////////////////////////////////////////////////////
 void Devices_delete()
 {
-    throw NotFinishException();
+    system("cls");
+    string name;
+    cout << "请输入要删除的器件名称：";
+    cin >> name;
+
+    Things* p = head.next;
+    Things* q = &head;
+    while(p)
+    {
+        if(p->thing->name == name)break;
+        q = p;
+        p = p -> next;
+    }
+    if(p)
+    {
+        cout << "请确认你要删除的器件的信息：" << endl;
+        cout << "名称：" << p->thing->name << endl;
+        if(p->type == 1 || p->type == 2)
+            cout << "数量：" << p->thing->num << endl;
+        if(p->type == 1 || p->type == 3)
+            cout << "价值：" << p->thing->value << endl;
+        cout << "你确定要删除该器件吗？(Y/N):";
+        char t;
+        cin >> t;
+        if(t == 'y' || t == 'Y')
+        {
+            q -> next = p -> next;
+            free(p);
+        }
+    }
+    else
+    {
+        cout << "未找到该器件";
+        system("pause");
+    }
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *函数名：Devices_search
