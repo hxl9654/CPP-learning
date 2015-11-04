@@ -24,13 +24,21 @@ const char * NotFinishException::what() const throw()
  *类  名：NoValueException
  *功  能：无相应属性异常。
  *作  者：何相龙
+ *版  本：1.1
+ *日  期：2015-11-04
+ *说  明：增加异常的备注
  *版  本：1.0
  *日  期：2015-11-04
 *///////////////////////////////////////////////////////////////////////////////////
 class NoValueException: public exception
 {
 public:
+    NoValueException() throw() { }
+    virtual ~NoValueException() throw(){ }
+    NoValueException(string msg) throw(){message = msg;}
     const char *what() const throw();
+private:
+    string message;
 };
 const char * NoValueException::what() const throw()
 {
@@ -46,22 +54,61 @@ const char * NoValueException::what() const throw()
 class base
 {
 public:
-    string name = "";    //该器件的名字
+    string name;    //该器件的名字
     virtual void increase(int n) const;   //器件入库（n：数量）
     virtual void decrease(int n) const;   //器件出库（n：数量）
     virtual double getValueSum() const;   //获取该器件的总价值（返回：总价值）
 };
 void base::increase(int n) const
 {
-    throw NoValueException();
+    throw NoValueException("num");
 }
 void base::decrease(int n) const
 {
-    throw NoValueException();
+    throw NoValueException("num");
 }
 double base::getValueSum() const
 {
-    throw NoValueException();
+    throw NoValueException("value");
+}
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：thing_withoutNum
+ *功  能：存储器件（仅一件）的信息。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+class thing_withoutNum: public base
+{
+public:
+    double value;       //器件单价
+    double getValueSum();   //获取该器件的总价值（返回：总价值）
+};
+double thing_withoutNum::getValueSum()
+{
+    return value;
+}
+/*//////////////////////////////////////////////////////////////////////////////////
+ *类  名：thing_withoutValue
+ *功  能：存储器件（无价值）的信息。
+ *作  者：何相龙
+ *版  本：1.0
+ *日  期：2015-11-04
+*///////////////////////////////////////////////////////////////////////////////////
+class thing_withoutValue: public base
+{
+public:
+    int num;            //库存数量
+    void increase(int n);   //器件入库（n：数量）
+    void decrease(int n);   //器件出库（n：数量）
+};
+void thing_withoutValue::increase(int n)
+{
+    num += n;
+}
+void thing_withoutValue::decrease(int n)
+{
+    num -= n;
 }
 /*//////////////////////////////////////////////////////////////////////////////////
  *类  名：thing
@@ -76,8 +123,8 @@ double base::getValueSum() const
 class thing: public base
 {
 public:
-    int num = 0;            //库存数量
-    double value = 0;       //器件单价
+    int num;            //库存数量
+    double value;       //器件单价
     void increase(int n);   //器件入库（n：数量）
     void decrease(int n);   //器件出库（n：数量）
     double getValueSum();   //获取该器件的总价值（返回：总价值）
