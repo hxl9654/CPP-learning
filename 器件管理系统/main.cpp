@@ -246,7 +246,11 @@ bool Exit_confirm()
 	cout << "确定请输入Y，取消请输入N：";
 	char t = ' ';
 	while (t == ' ' || t == '\n' || t == '\r')
+	{
 		cin >> t;
+		cin.clear();
+		cin.ignore();
+	}
 	if (t == 'y' || t == 'Y')
 		return true;
 	else return false;
@@ -303,15 +307,31 @@ void Devices_new()
 	lable_Devices_new11:
 		cout << "请输入器件的名称：";
 		cin >> name;
-		if (!CheckName(name))goto lable_Devices_new11;
+		if (!CheckName(name))
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new11;
+		}
 	lable_Devices_new12:
 		cout << "请输入器件的数量：";
 		cin >> num;
-		if (num <= 0)goto lable_Devices_new12;
+		if (num <= 0)
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new12;
+		}
 	lable_Devices_new13:
 		cout << "请输入器件的价值：";
+		fflush(stdin);
 		cin >> value;
-		if (value <= 0)goto lable_Devices_new13;
+		if (value <= 0)
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new13;
+		}
 
 		Things* p = &head;
 		Things* add = (Things*)malloc(sizeof(Things));
@@ -335,12 +355,24 @@ void Devices_new()
 		int num;
 	lable_Devices_new21:
 		cout << "请输入器件的名称：";
+		fflush(stdin);
 		cin >> name;
-		if (!CheckName(name))goto lable_Devices_new21;
+		if (!CheckName(name))
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new21;
+		}
 	lable_Devices_new22:
 		cout << "请输入器件的数量：";
+		fflush(stdin);
 		cin >> num;
-		if (num <= 0)goto lable_Devices_new22;
+		if (num <= 0)
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new22;
+		}
 
 		Things* p = &head;
 		Things* add = (Things*)malloc(sizeof(Things));
@@ -363,12 +395,24 @@ void Devices_new()
 		double value;
 	lable_Devices_new31:
 		cout << "请输入器件的名称：";
+		fflush(stdin);
 		cin >> name;
-		if (!CheckName(name))goto lable_Devices_new31;
+		if (!CheckName(name))
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new31;
+		}
 	lable_Devices_new32:
 		cout << "请输入器件的价值：";
+		fflush(stdin);
 		cin >> value;
-		if (value <= 0)goto lable_Devices_new32;
+		if (value <= 0)
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new32;
+		}
 
 		Things* p = &head;
 		Things* add = (Things*)malloc(sizeof(Things));
@@ -390,8 +434,14 @@ void Devices_new()
 		string name;
 	lable_Devices_new41:
 		cout << "请输入器件的名称：";
+		fflush(stdin);
 		cin >> name;
-		if (!CheckName(name))goto lable_Devices_new41;
+		if (!CheckName(name))
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_new41;
+		}
 
 		Things* p = &head;
 		Things* add = (Things*)malloc(sizeof(Things));
@@ -410,6 +460,9 @@ void Devices_new()
 	default:
 	{
 		cout << "选择有误，请重新选择" << endl;
+		cin.clear();
+		cin.ignore();
+		system("pause");
 		Devices_new();
 		return;
 	}
@@ -542,6 +595,8 @@ void Devices_search()
 	{
 		cout << "输入有误，请重新输入" << endl;
 		system("pause");
+		cin.clear();
+		cin.ignore();
 		Devices_search();
 		return;
 	}
@@ -610,7 +665,11 @@ lable_Devices_change1:
 			int num;
 			cin >> num;
 			if (num < 0)
+			{
+				cin.clear();
+				cin.ignore();
 				goto lable_Devices_change4;
+			}
 			p->thing->num = num;
 			break;
 		}
@@ -628,7 +687,12 @@ lable_Devices_change1:
 			double value;
 			cin >> value;
 			if (value <= 0)
+			{
+				cin.clear();
+				cin.ignore();
 				goto lable_Devices_change5;
+			}
+
 			p->thing->value = value;
 			break;
 		}
@@ -692,11 +756,21 @@ lable_Devices_io1:
 		char t;
 		cin >> t;
 		if (t != 'i'&&t != 'I'&&t != 'o'&&t != 'O')
+		{
+			cin.clear();
+			cin.ignore();
 			goto lable_Devices_io2;
+		}
+	lable_Devices_io3:
 		cout << "请输入数量：";
 		int n;
 		cin >> n;
-
+		if (n < 0)
+		{
+			cin.clear();
+			cin.ignore();
+			goto lable_Devices_io3;
+		}
 		if (t == 'i' || t == 'I')
 			p->thing->increase(n);
 		else
@@ -906,7 +980,6 @@ int main()
 		{
 			if (Exit_confirm())
 				return 0;
-			else menu();
 			break;
 		}
 		case(1) : Devices_new(); break;
@@ -920,7 +993,8 @@ int main()
 		{
 			cout << "输入有误，请重新输入。" << endl;
 			system("pause");
-			menu();
+			cin.clear();
+			cin.ignore();
 			break;
 		}
 		}
